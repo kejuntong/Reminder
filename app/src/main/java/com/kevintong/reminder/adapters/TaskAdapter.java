@@ -1,4 +1,4 @@
-package com.kevintong.reminder;
+package com.kevintong.reminder.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import com.kevintong.reminder.R;
+import com.kevintong.reminder.models.TaskDetails;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by kevintong on 2017-03-28.
@@ -69,7 +71,7 @@ public class TaskAdapter extends BaseExpandableListAdapter{
 
         String taskTitle = (String) getGroup(groupPosition);
         if (convertView == null){
-            convertView = layoutInflater.inflate(R.layout.view_test_row, parent, false);
+            convertView = layoutInflater.inflate(R.layout.item_task_title, parent, false);
         }
         TextView textView = (TextView) convertView.findViewById(R.id.text_view);
         textView.setText(taskTitle);
@@ -82,7 +84,7 @@ public class TaskAdapter extends BaseExpandableListAdapter{
 
         String detailString = ((TaskDetails) getChild(groupPosition, childPosition)).getDetailString();
         if (convertView == null){
-            convertView = layoutInflater.inflate(R.layout.view_test_row, parent, false);
+            convertView = layoutInflater.inflate(R.layout.item_task_title, parent, false);
         }
         TextView textView = (TextView) convertView.findViewById(R.id.text_view);
         textView.setText(detailString);

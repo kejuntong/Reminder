@@ -1,4 +1,4 @@
-package com.kevintong.reminder;
+package com.kevintong.reminder.database;
 
 import android.provider.BaseColumns;
 
@@ -8,8 +8,8 @@ import android.provider.BaseColumns;
 
 public class TaskDbContract {
 
-    static final String DB_NAME = "task.db";
-    static final int DB_VERSION = 1;
+    public static final String DB_NAME = "task.db";
+    public static final int DB_VERSION = 1;
 
     public class TestDbEntry implements BaseColumns {
         public static final String TABLE = "task";

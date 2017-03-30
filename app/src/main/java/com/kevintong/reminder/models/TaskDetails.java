@@ -1,4 +1,4 @@
-package com.kevintong.reminder;
+package com.kevintong.reminder.models;
 
 /**
  * Created by kevintong on 2017-03-28.
@@ -6,8 +6,8 @@ package com.kevintong.reminder;
 
 public class TaskDetails {
 
-    final static int TASK_DESC = 1;
-    final static int TASK_TIME = 2;
+    public final static int TASK_DESC = 1;
+    public final static int TASK_TIME = 2;
 
     int whichDetail;
     String detailString;

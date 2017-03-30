@@ -1,13 +1,20 @@
-package com.kevintong.reminder;
+package com.kevintong.reminder.activities;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+
+import com.kevintong.reminder.R;
+import com.kevintong.reminder.adapters.TaskAdapter;
+import com.kevintong.reminder.models.TaskDetails;
+import com.kevintong.reminder.database.TaskDbContract;
+import com.kevintong.reminder.database.TaskDbHelper;
 
 import java.util.ArrayList;
 
@@ -37,18 +44,11 @@ public class HomeActivity extends Activity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeAnItemInDb();
-
-//                taskList.add("title test");
-//                ArrayList<TaskDetails> detailList = new ArrayList<>();
-//                detailList.add(new TaskDetails());
-//                detailList.add(new TaskDetails());
-//                taskDetailList.add(detailList);
+//                writeAnItemInDb();
 //
-//                taskAdapter.notifyDataSetChanged();
+//                loadDataFromDb();
 
-                loadDataFromDb();
-
+                startActivity(new Intent(HomeActivity.this, CreateTaskActivity.class));
             }
         });
 
@@ -58,19 +58,6 @@ public class HomeActivity extends Activity {
 
         taskList = new ArrayList<>();
         taskDetailList = new ArrayList<>();
-
-        taskList.add("title 1");
-        ArrayList<TaskDetails> detailList1 = new ArrayList<>();
-        detailList1.add(new TaskDetails());
-        detailList1.add(new TaskDetails());
-        taskDetailList.add(detailList1);
-
-        taskList.add("title 2");
-        ArrayList<TaskDetails> detailList2 = new ArrayList<>();
-        detailList2.add(new TaskDetails());
-        detailList2.add(new TaskDetails());
-        taskDetailList.add(detailList2);
-
         expandableListView = (ExpandableListView) findViewById(R.id.list_view);
         taskAdapter = new TaskAdapter(HomeActivity.this, taskList, taskDetailList);
         expandableListView.setAdapter(taskAdapter);
@@ -88,18 +75,12 @@ public class HomeActivity extends Activity {
 
         while (cursor.moveToNext()){
             int idx = cursor.getColumnIndex(TaskDbContract.TestDbEntry.COL_ONE);
-            System.out.println("test col one idx: " + idx);
-            System.out.println("test col one name: " + cursor.getColumnName(idx));
             String taskTitle = cursor.getString(idx);
             taskList.add(taskTitle);
 
             idx = cursor.getColumnIndex(TaskDbContract.TestDbEntry.COL_TWO);
-            System.out.println("test col two idx: " + idx);
-            System.out.println("test col two name: " + cursor.getColumnName(idx));
             String taskDesc = cursor.getString(idx);
             idx = cursor.getColumnIndex(TaskDbContract.TestDbEntry.COL_THREE);
-            System.out.println("test col three idx: " + idx);
-            System.out.println("test col three name: " + cursor.getColumnName(3));
             String taskTime = cursor.getString(idx);
 
             ArrayList<TaskDetails> details = new ArrayList<>();
