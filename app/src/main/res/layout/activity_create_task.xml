@@ -1,25 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/test_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="test text"
-        android:textAllCaps="true"/>
-
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textAllCaps="true"
-        android:textColor="@color/colorAccent"
-        android:inputType="text"
-        android:background="@drawable/edit_text_line_background"
-        android:textSize="15dp"
-        android:gravity="center_vertical"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <com.kevintong.reminder.views.CustomFontTextView
+            android:id="@+id/task_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:text="Task name"
+            android:textColor="@color/black"
+            android:textAllCaps="true"/>
+
+        <EditText
+            android:id="@+id/task_name_input"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textColor="@color/black"
+            android:background="@drawable/edit_text_line_background"
+            android:hint="What is to be done"
+            android:textCursorDrawable="@drawable/text_cursor_orange"
+            android:textSize="17dp"
+            android:gravity="center_vertical"/>
+
+        <com.kevintong.reminder.views.CustomFontTextView
+            android:id="@+id/task_details_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:text="Task details"
+            android:textColor="@color/black"
+            android:textAllCaps="true"/>
+
+        <EditText
+            android:id="@+id/task_details_input"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textColor="@color/black"
+            android:background="@drawable/edit_text_line_background"
+            android:text=""
+            android:hint="Add some details (optional)"
+            android:textSize="17dp"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.kevintong.reminder.views.CustomFontButton
+            android:id="@+id/back_button"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/round_button_orange"
+            android:text="back"
+            android:textSize="17dp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textColor="@color/orange"/>
+
+        <com.kevintong.reminder.views.CustomFontButton
+            android:id="@+id/save_button"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/round_button_orange"
+            android:text="save"
+            android:textSize="17dp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textColor="@color/orange"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

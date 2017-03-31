@@ -10,8 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
+import com.kevintong.reminder.MyApp;
 import com.kevintong.reminder.R;
 import com.kevintong.reminder.adapters.TaskAdapter;
+import com.kevintong.reminder.database.TaskDbUtilMethods;
 import com.kevintong.reminder.models.TaskDetails;
 import com.kevintong.reminder.database.TaskDbContract;
 import com.kevintong.reminder.database.TaskDbHelper;
@@ -19,8 +21,6 @@ import com.kevintong.reminder.database.TaskDbHelper;
 import java.util.ArrayList;
 
 public class HomeActivity extends Activity {
-
-    TaskDbHelper dbHelper;
 
     ExpandableListView expandableListView;
     TaskAdapter taskAdapter;
@@ -36,15 +36,13 @@ public class HomeActivity extends Activity {
 
         initRecyclerView();
 
-        dbHelper = new TaskDbHelper(this, TaskDbContract.DB_NAME, null, TaskDbContract.DB_VERSION);
-
-        loadDataFromDb();
+//        dbHelper = new TaskDbHelper(this, TaskDbContract.DB_NAME, null, TaskDbContract.DB_VERSION);
 
         addButton = (Button) findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                writeAnItemInDb();
+//                TaskDbUtilMethods.writeAnItemToTaskTable(dbHelper, "test title", "test desc", "test time");
 //
 //                loadDataFromDb();
 
@@ -52,6 +50,12 @@ public class HomeActivity extends Activity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadDataFromDb();
     }
 
     public void initRecyclerView(){
@@ -64,7 +68,7 @@ public class HomeActivity extends Activity {
     }
 
     public void loadDataFromDb(){
-        SQLiteDatabase readDb = dbHelper.getReadableDatabase();
+        SQLiteDatabase readDb = MyApp.dbHelper.getReadableDatabase();
         Cursor cursor = readDb.rawQuery("SELECT * FROM " + TaskDbContract.TestDbEntry.TABLE, null);
 //        Cursor cursor = readDb.query(TestDbContract.TestDbEntry.TABLE,
 //                new String[]{TestDbContract.TestDbEntry._ID, TestDbContract.TestDbEntry.COL_ONE, TestDbContract.TestDbEntry.COL_TWO, TestDbContract.TestDbEntry.COL_THREE},
@@ -92,17 +96,6 @@ public class HomeActivity extends Activity {
         cursor.close();
         readDb.close();
         taskAdapter.notifyDataSetChanged();
-    }
-
-    public void writeAnItemInDb(){
-        ContentValues values = new ContentValues();
-        values.put(TaskDbContract.TestDbEntry.COL_ONE, "test title");
-        values.put(TaskDbContract.TestDbEntry.COL_TWO, "added item des");
-        values.put(TaskDbContract.TestDbEntry.COL_THREE, "added item time");
-        SQLiteDatabase writeDb = dbHelper.getWritableDatabase();
-        writeDb.insertWithOnConflict(TaskDbContract.TestDbEntry.TABLE,
-                null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        writeDb.close();
     }
 
 }

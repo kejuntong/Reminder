@@ -2,10 +2,15 @@ package com.kevintong.reminder.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 
-import com.kevintong.reminder.FontLoader;
+import com.kevintong.reminder.MyApp;
+import com.kevintong.reminder.views.CustomFontButton;
 import com.kevintong.reminder.R;
+import com.kevintong.reminder.database.TaskDbUtilMethods;
 
 /**
  * Created by kevintong on 2017-03-29.
@@ -13,12 +18,87 @@ import com.kevintong.reminder.R;
 
 public class CreateTaskActivity extends Activity {
 
+    CustomFontButton backButton;
+    CustomFontButton saveButton;
+
+    EditText taskNameInput;
+    EditText taskDetailsInput;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_task);
 
-        TextView testTextView = (TextView) findViewById(R.id.test_text);
-        FontLoader.setTextViewASMAN(CreateTaskActivity.this, testTextView);
+        initViews();
+
+        setTopButtons();
+    }
+
+    public void initViews(){
+        backButton = (CustomFontButton) findViewById(R.id.back_button);
+        saveButton = (CustomFontButton) findViewById(R.id.save_button);
+        taskNameInput = (EditText) findViewById(R.id.task_name_input);
+        taskDetailsInput = (EditText) findViewById(R.id.task_details_input);
+
+        taskNameInput.requestFocus();
+    }
+
+    public void setTopButtons(){
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Animation backButtonAnim = AnimationUtils.loadAnimation(CreateTaskActivity.this, R.anim.button_clicked);
+                backButton.startAnimation(backButtonAnim);
+
+                backButtonAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+            }
+        });
+
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Animation saveButtonAnim = AnimationUtils.loadAnimation(CreateTaskActivity.this, R.anim.button_clicked);
+                saveButton.startAnimation(saveButtonAnim);
+
+                saveButtonAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        String taskTitle = taskNameInput.getText().toString();
+                        String taskDesc = taskDetailsInput.getText().toString();
+                        String taskTime = "hold on";
+                        TaskDbUtilMethods.writeAnItemToTaskTable(MyApp.dbHelper, taskTitle, taskDesc, taskTime);
+                        finish();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+            }
+        });
     }
 }
