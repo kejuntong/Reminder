@@ -25,4 +25,10 @@ public class TaskDbUtilMethods {
         writeDb.close();
     }
 
+    public static void removeItemFromTaskTable(TaskDbHelper dbHelper, String taskId){
+        SQLiteDatabase writeDb = dbHelper.getWritableDatabase();
+        writeDb.delete(TaskDbContract.TestDbEntry.TABLE, TaskDbContract.TestDbEntry._ID + "=" + taskId, null);
+        writeDb.close();
+    }
+
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
+import com.kevintong.reminder.CallbackInterface;
 import com.kevintong.reminder.MyApp;
 import com.kevintong.reminder.R;
 import com.kevintong.reminder.adapters.TaskAdapter;
@@ -17,6 +18,7 @@ import com.kevintong.reminder.database.TaskDbUtilMethods;
 import com.kevintong.reminder.models.TaskDetails;
 import com.kevintong.reminder.database.TaskDbContract;
 import com.kevintong.reminder.database.TaskDbHelper;
+import com.kevintong.reminder.models.TaskName;
 
 import java.util.ArrayList;
 
@@ -24,7 +26,7 @@ public class HomeActivity extends Activity {
 
     ExpandableListView expandableListView;
     TaskAdapter taskAdapter;
-    ArrayList<String> taskList;
+    ArrayList<TaskName> taskList;
     ArrayList<ArrayList<TaskDetails>> taskDetailList;
 
     Button addButton;
@@ -34,7 +36,7 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        initRecyclerView();
+        initListView();
 
 //        dbHelper = new TaskDbHelper(this, TaskDbContract.DB_NAME, null, TaskDbContract.DB_VERSION);
 
@@ -58,12 +60,20 @@ public class HomeActivity extends Activity {
         loadDataFromDb();
     }
 
-    public void initRecyclerView(){
+    public void initListView(){
 
         taskList = new ArrayList<>();
         taskDetailList = new ArrayList<>();
         expandableListView = (ExpandableListView) findViewById(R.id.list_view);
         taskAdapter = new TaskAdapter(HomeActivity.this, taskList, taskDetailList);
+
+        taskAdapter.setRemoveItemCallback(new CallbackInterface() {
+            @Override
+            public void onCallback(Object object) {
+                loadDataFromDb();
+            }
+        });
+
         expandableListView.setAdapter(taskAdapter);
     }
 
@@ -80,7 +90,11 @@ public class HomeActivity extends Activity {
         while (cursor.moveToNext()){
             int idx = cursor.getColumnIndex(TaskDbContract.TestDbEntry.COL_ONE);
             String taskTitle = cursor.getString(idx);
-            taskList.add(taskTitle);
+
+            idx = cursor.getColumnIndex(TaskDbContract.TestDbEntry._ID);
+            String taskId = cursor.getString(idx);
+
+            taskList.add(new TaskName(taskTitle, taskId));
 
             idx = cursor.getColumnIndex(TaskDbContract.TestDbEntry.COL_TWO);
             String taskDesc = cursor.getString(idx);
