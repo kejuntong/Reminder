@@ -1,12 +1,14 @@
 package com.kevintong.reminder.activities;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kevintong.reminder.MyApp;
 import com.kevintong.reminder.views.CustomFontButton;
 import com.kevintong.reminder.R;
@@ -87,6 +89,12 @@ public class CreateTaskActivity extends Activity {
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         String taskTitle = taskNameInput.getText().toString();
+
+                        if (taskTitle.trim().isEmpty()){
+                            showEmptyTaskNameDialog();
+                            return;
+                        }
+
                         String taskDesc = taskDetailsInput.getText().toString();
                         String taskTime = "hold on";
                         TaskDbUtilMethods.writeAnItemToTaskTable(MyApp.dbHelper, taskTitle, taskDesc, taskTime);
@@ -100,5 +108,16 @@ public class CreateTaskActivity extends Activity {
                 });
             }
         });
+    }
+
+    private void showEmptyTaskNameDialog(){
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(CreateTaskActivity.this)
+                .content(getString(R.string.empty_task_name))
+                .contentColorRes(R.color.black)
+                .backgroundColorRes(R.color.white)
+                .positiveText("OK")
+                .positiveColorRes(R.color.blue);
+
+        builder.build().show();
     }
 }
