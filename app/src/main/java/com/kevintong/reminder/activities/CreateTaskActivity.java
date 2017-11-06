@@ -1,30 +1,40 @@
 package com.kevintong.reminder.activities;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kevintong.reminder.MyApp;
 import com.kevintong.reminder.views.CustomFontButton;
 import com.kevintong.reminder.R;
 import com.kevintong.reminder.database.TaskDbUtilMethods;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by kevintong on 2017-03-29.
  */
 
-public class CreateTaskActivity extends Activity {
+public class CreateTaskActivity extends Activity
+        implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
     CustomFontButton backButton;
     CustomFontButton saveButton;
 
     EditText taskNameInput;
     EditText taskDetailsInput;
+
+    Calendar selectedTime = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +53,67 @@ public class CreateTaskActivity extends Activity {
         taskDetailsInput = (EditText) findViewById(R.id.task_details_input);
 
         taskNameInput.requestFocus();
+
+        Button button = (Button) findViewById(R.id.test_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar now = Calendar.getInstance();
+                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                        CreateTaskActivity.this,
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.setMinDate(now);
+                dpd.setAccentColor(getResources().getColor(R.color.orange));
+                dpd.show(getFragmentManager(), "DatePicker");
+            }
+        });
+
+    }
+
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        selectedTime.set(Calendar.YEAR, year);
+        selectedTime.set(Calendar.MONTH, monthOfYear);
+        selectedTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        Calendar now = Calendar.getInstance();
+        TimePickerDialog tpd = TimePickerDialog.newInstance(
+                CreateTaskActivity.this,
+                now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE),
+                false
+        );
+        if (isTimePickerConstraintRequired()) {
+            tpd.setMinTime(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
+        }
+        tpd.setAccentColor(getResources().getColor(R.color.orange));
+        tpd.show(getFragmentManager(), "TimePicker");
+    }
+
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+        selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        selectedTime.set(Calendar.MINUTE, minute);
+        selectedTime.set(Calendar.SECOND, second);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm aaa @ EEE, MMM d, yyyy", Locale.US);
+        String timeString = sdf.format(selectedTime.getTime());
+
+        TextView textView = (TextView) findViewById(R.id.test_txt);
+        textView.setText(timeString);
+    }
+
+    private boolean isTimePickerConstraintRequired(){
+        // since already set the minimum for date picker, only need to see if it's same day
+        Calendar now = Calendar.getInstance();
+        return
+                selectedTime.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
+                selectedTime.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
+                selectedTime.get(Calendar.DAY_OF_MONTH) == now.get(Calendar.DAY_OF_MONTH);
     }
 
     public void setTopButtons(){
@@ -120,4 +191,5 @@ public class CreateTaskActivity extends Activity {
 
         builder.build().show();
     }
+
 }
