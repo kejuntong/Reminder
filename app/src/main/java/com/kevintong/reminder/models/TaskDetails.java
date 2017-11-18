@@ -10,24 +10,19 @@ public class TaskDetails {
     public final static int TASK_TIME = 2;
 
     int whichDetail;
-    String detailString;
+    Object detailObject;
 
-    public TaskDetails(int whichDetail, String detailString){
+    public TaskDetails(int whichDetail, Object detail){
         this.whichDetail = whichDetail;
-        this.detailString = detailString;
-    }
-
-    public TaskDetails(){
-        this.whichDetail = TASK_DESC;
-        this.detailString = "test desc";
+        this.detailObject = detail;
     }
 
     public int getWhichDetail(){
         return this.whichDetail;
     }
 
-    public String getDetailString(){
-        return this.detailString;
+    public Object getDetailObject(){
+        return this.detailObject;
     }
 
 }

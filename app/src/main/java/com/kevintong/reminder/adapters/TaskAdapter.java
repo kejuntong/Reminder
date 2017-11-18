@@ -15,11 +15,15 @@ import android.widget.Toast;
 import com.kevintong.reminder.CallbackInterface;
 import com.kevintong.reminder.MyApp;
 import com.kevintong.reminder.R;
+import com.kevintong.reminder.UtilMethods;
 import com.kevintong.reminder.database.TaskDbUtilMethods;
 import com.kevintong.reminder.models.TaskDetails;
 import com.kevintong.reminder.models.TaskName;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by kevintong on 2017-03-28.
@@ -116,12 +120,18 @@ public class TaskAdapter extends BaseExpandableListAdapter{
     @Override
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        String detailString = ((TaskDetails) getChild(groupPosition, childPosition)).getDetailString();
+        Object detailObject = ((TaskDetails) getChild(groupPosition, childPosition)).getDetailObject();
         if (convertView == null){
             convertView = layoutInflater.inflate(R.layout.item_task_details, parent, false);
         }
         TextView textView = (TextView) convertView.findViewById(R.id.detail_text);
-        textView.setText(detailString);
+        if (detailObject != null) {
+            if (detailObject instanceof String) {
+                textView.setText((String) detailObject);
+            } else if (detailObject instanceof Long) {
+                textView.setText(UtilMethods.timeToString((Long) detailObject));
+            }
+        }
 
         return convertView;
     }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kevintong.reminder.MyApp;
+import com.kevintong.reminder.UtilMethods;
 import com.kevintong.reminder.views.CustomFontButton;
 import com.kevintong.reminder.R;
 import com.kevintong.reminder.database.TaskDbUtilMethods;
@@ -88,7 +89,7 @@ public class CreateTaskActivity extends Activity
                 false
         );
         if (isTimePickerConstraintRequired()) {
-            tpd.setMinTime(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND));
+            tpd.setMinTime(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), 0);
         }
         tpd.setAccentColor(getResources().getColor(R.color.orange));
         tpd.show(getFragmentManager(), "TimePicker");
@@ -98,13 +99,11 @@ public class CreateTaskActivity extends Activity
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
         selectedTime.set(Calendar.MINUTE, minute);
-        selectedTime.set(Calendar.SECOND, second);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm aaa @ EEE, MMM d, yyyy", Locale.US);
-        String timeString = sdf.format(selectedTime.getTime());
+        selectedTime.set(Calendar.SECOND, 0);
 
         TextView textView = (TextView) findViewById(R.id.test_txt);
-        textView.setText(timeString);
+        textView.setText(UtilMethods.timeToString(selectedTime.getTimeInMillis()));
+
     }
 
     private boolean isTimePickerConstraintRequired(){
@@ -167,7 +166,7 @@ public class CreateTaskActivity extends Activity
                         }
 
                         String taskDesc = taskDetailsInput.getText().toString();
-                        String taskTime = "hold on";
+                        long taskTime = selectedTime.getTimeInMillis();
                         TaskDbUtilMethods.writeAnItemToTaskTable(MyApp.dbHelper, taskTitle, taskDesc, taskTime);
                         finish();
                     }

@@ -13,7 +13,7 @@ public class TaskDbUtilMethods {
             TaskDbHelper dbHelper,
             String taskTitle,
             String taskDesc,
-            String taskTime)
+            Long taskTime)
     {
         ContentValues values = new ContentValues();
         values.put(TaskDbContract.TestDbEntry.COL_ONE, taskTitle);

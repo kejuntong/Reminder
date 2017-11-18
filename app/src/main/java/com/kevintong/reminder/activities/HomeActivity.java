@@ -99,7 +99,7 @@ public class HomeActivity extends Activity {
             idx = cursor.getColumnIndex(TaskDbContract.TestDbEntry.COL_TWO);
             String taskDesc = cursor.getString(idx);
             idx = cursor.getColumnIndex(TaskDbContract.TestDbEntry.COL_THREE);
-            String taskTime = cursor.getString(idx);
+            Long taskTime = cursor.getLong(idx);
 
             ArrayList<TaskDetails> details = new ArrayList<>();
             details.add(new TaskDetails(TaskDetails.TASK_DESC, taskDesc));
