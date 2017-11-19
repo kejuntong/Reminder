@@ -31,9 +31,11 @@ public class CreateTaskActivity extends Activity
 
     CustomFontButton backButton;
     CustomFontButton saveButton;
+    CustomFontButton setTimeButton;
 
     EditText taskNameInput;
     EditText taskDetailsInput;
+    TextView setTimeText;
 
     Calendar selectedTime = Calendar.getInstance();
 
@@ -44,34 +46,19 @@ public class CreateTaskActivity extends Activity
 
         initViews();
 
-        setTopButtons();
+        setButtons();
     }
 
     public void initViews(){
         backButton = (CustomFontButton) findViewById(R.id.back_button);
         saveButton = (CustomFontButton) findViewById(R.id.save_button);
+        setTimeButton = (CustomFontButton) findViewById(R.id.set_time_button);
+
         taskNameInput = (EditText) findViewById(R.id.task_name_input);
         taskDetailsInput = (EditText) findViewById(R.id.task_details_input);
+        setTimeText = (TextView) findViewById(R.id.set_time_text);
 
         taskNameInput.requestFocus();
-
-        Button button = (Button) findViewById(R.id.test_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar now = Calendar.getInstance();
-                DatePickerDialog dpd = DatePickerDialog.newInstance(
-                        CreateTaskActivity.this,
-                        now.get(Calendar.YEAR),
-                        now.get(Calendar.MONTH),
-                        now.get(Calendar.DAY_OF_MONTH)
-                );
-                dpd.setMinDate(now);
-                dpd.setAccentColor(getResources().getColor(R.color.orange));
-                dpd.show(getFragmentManager(), "DatePicker");
-            }
-        });
-
     }
 
 
@@ -101,8 +88,7 @@ public class CreateTaskActivity extends Activity
         selectedTime.set(Calendar.MINUTE, minute);
         selectedTime.set(Calendar.SECOND, 0);
 
-        TextView textView = (TextView) findViewById(R.id.test_txt);
-        textView.setText(UtilMethods.timeToString(selectedTime.getTimeInMillis()));
+        setTimeText.setText(UtilMethods.timeToString(selectedTime.getTimeInMillis()));
 
     }
 
@@ -115,7 +101,7 @@ public class CreateTaskActivity extends Activity
                 selectedTime.get(Calendar.DAY_OF_MONTH) == now.get(Calendar.DAY_OF_MONTH);
     }
 
-    public void setTopButtons(){
+    public void setButtons(){
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,6 +162,50 @@ public class CreateTaskActivity extends Activity
 
                     }
                 });
+            }
+        });
+
+        setTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Animation setButtonAnimation = AnimationUtils.loadAnimation(CreateTaskActivity.this, R.anim.button_clicked);
+                setTimeButton.startAnimation(setButtonAnimation);
+
+                setButtonAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        setTimeButton.setClickable(false);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        setTimeButton.setClickable(true);
+                        Calendar now = Calendar.getInstance();
+                        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                                CreateTaskActivity.this,
+                                now.get(Calendar.YEAR),
+                                now.get(Calendar.MONTH),
+                                now.get(Calendar.DAY_OF_MONTH)
+                        );
+                        dpd.setMinDate(now);
+                        dpd.setAccentColor(getResources().getColor(R.color.orange));
+                        dpd.show(getFragmentManager(), "DatePicker");
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+            }
+        });
+
+        setTimeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setTimeButton.performClick();
             }
         });
     }
