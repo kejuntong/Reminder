@@ -88,21 +88,12 @@ public class TaskAdapter extends BaseExpandableListAdapter{
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
         final String taskTitle = ((TaskName) getGroup(groupPosition)).getTaskName();
-        final String taskId = ((TaskName) getGroup(groupPosition)).getTaskId();
+
         if (convertView == null){
             convertView = layoutInflater.inflate(R.layout.item_task_title, parent, false);
         }
         final TextView textView = (TextView) convertView.findViewById(R.id.title_text);
         textView.setText(taskTitle);
-
-        Button removeButton = (Button) convertView.findViewById(R.id.remove_button);
-        removeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TaskDbUtilMethods.removeItemFromTaskTable(MyApp.dbHelper, taskId);
-                removeItemCallback.onCallback(null);
-            }
-        });
 
         if (groupPosition == expandingPos){
             Animation textAnim = AnimationUtils.loadAnimation(mContext, R.anim.task_expand);
@@ -118,20 +109,41 @@ public class TaskAdapter extends BaseExpandableListAdapter{
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        Object detailObject = ((TaskDetails) getChild(groupPosition, childPosition)).getDetailObject();
-        if (convertView == null){
-            convertView = layoutInflater.inflate(R.layout.item_task_details, parent, false);
+
+        TaskDetails taskDetail = (TaskDetails) getChild(groupPosition, childPosition);
+
+        // for dummy item
+        if (taskDetail.getWhichDetail() == TaskDetails.DUMMY_ITEM){
+            if (convertView == null){
+                convertView = layoutInflater.inflate(R.layout.item_task_details_dummy, parent, false);
+            }
+            Button removeButton = (Button) convertView.findViewById(R.id.remove_button);
+            removeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    TaskDbUtilMethods.removeItemFromTaskTable(MyApp.dbHelper, ((TaskName) getGroup(groupPosition)).getTaskId());
+                    removeItemCallback.onCallback(null);
+                }
+            });
         }
-        TextView textView = (TextView) convertView.findViewById(R.id.detail_text);
-        if (detailObject != null) {
-            if (detailObject instanceof String) {
-                textView.setText((String) detailObject);
-            } else if (detailObject instanceof Long) {
-                textView.setText(UtilMethods.timeToString((Long) detailObject));
+        // for normal task detail items
+        else {
+            if (convertView == null){
+                convertView = layoutInflater.inflate(R.layout.item_task_details, parent, false);
+            }
+            TextView textView = (TextView) convertView.findViewById(R.id.detail_text);
+            Object detailObject = taskDetail.getDetailObject();
+            if (detailObject != null) {
+                if (detailObject instanceof String) {
+                    textView.setText((String) detailObject);
+                } else if (detailObject instanceof Long) {
+                    textView.setText(UtilMethods.timeToString((Long) detailObject));
+                }
             }
         }
+
 
         return convertView;
     }

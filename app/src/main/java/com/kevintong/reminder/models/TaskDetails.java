@@ -6,6 +6,9 @@ package com.kevintong.reminder.models;
 
 public class TaskDetails {
 
+    // dummy item for holding remove and edit buttons
+    public final static int DUMMY_ITEM = 0;
+
     public final static int TASK_DESC = 1;
     public final static int TASK_TIME = 2;
 
@@ -15,6 +18,11 @@ public class TaskDetails {
     public TaskDetails(int whichDetail, Object detail){
         this.whichDetail = whichDetail;
         this.detailObject = detail;
+    }
+
+    // for dummy item
+    public TaskDetails(){
+        this.whichDetail = DUMMY_ITEM;
     }
 
     public int getWhichDetail(){

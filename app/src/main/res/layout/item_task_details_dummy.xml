@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <com.kevintong.reminder.views.CustomFontButton
+            android:id="@+id/edit_button"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:background="@drawable/round_button_orange"
+            android:text="edit"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textColor="@color/orange"
+            android:focusable="false"/>
+
+        <com.kevintong.reminder.views.CustomFontButton
+            android:id="@+id/remove_button"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@id/edit_button"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/round_button_orange"
+            android:text="remove"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textColor="@color/orange"
+            android:focusable="false"/>
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

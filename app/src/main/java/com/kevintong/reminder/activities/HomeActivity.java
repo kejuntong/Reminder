@@ -105,6 +105,9 @@ public class HomeActivity extends Activity {
             details.add(new TaskDetails(TaskDetails.TASK_DESC, taskDesc));
             details.add(new TaskDetails(TaskDetails.TASK_TIME, taskTime));
 
+            // dummy item for holding remove and edit buttons
+            details.add(new TaskDetails());
+
             taskDetailList.add(details);
         }
         cursor.close();
