@@ -65,17 +65,36 @@
             android:textColor="@color/black"
             android:textAllCaps="true"/>
 
-        <com.kevintong.reminder.views.CustomFontButton
-            android:id="@+id/set_time_button"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/round_button_orange"
-            android:text="Set"
-            android:textSize="17dp"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:textColor="@color/orange"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+
+            <com.kevintong.reminder.views.CustomFontButton
+                android:id="@+id/set_time_button"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:background="@drawable/round_button_orange"
+                android:text="Set"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:textColor="@color/orange"/>
+
+            <com.kevintong.reminder.views.CustomFontButton
+                android:id="@+id/clear_time_button"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/round_button_orange"
+                android:text="Clear"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:textColor="@color/orange"/>
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/set_time_text"

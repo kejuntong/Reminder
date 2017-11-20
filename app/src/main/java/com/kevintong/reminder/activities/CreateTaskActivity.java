@@ -32,12 +32,14 @@ public class CreateTaskActivity extends Activity
     CustomFontButton backButton;
     CustomFontButton saveButton;
     CustomFontButton setTimeButton;
+    CustomFontButton clearTimeButton;
 
     EditText taskNameInput;
     EditText taskDetailsInput;
     TextView setTimeText;
 
     Calendar selectedTime = Calendar.getInstance();
+    Calendar timeToSave = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class CreateTaskActivity extends Activity
         backButton = (CustomFontButton) findViewById(R.id.back_button);
         saveButton = (CustomFontButton) findViewById(R.id.save_button);
         setTimeButton = (CustomFontButton) findViewById(R.id.set_time_button);
+        clearTimeButton = (CustomFontButton) findViewById(R.id.clear_time_button);
 
         taskNameInput = (EditText) findViewById(R.id.task_name_input);
         taskDetailsInput = (EditText) findViewById(R.id.task_details_input);
@@ -88,6 +91,7 @@ public class CreateTaskActivity extends Activity
         selectedTime.set(Calendar.MINUTE, minute);
         selectedTime.set(Calendar.SECOND, 0);
 
+        timeToSave = selectedTime;
         setTimeText.setText(UtilMethods.timeToString(selectedTime.getTimeInMillis()));
 
     }
@@ -152,7 +156,7 @@ public class CreateTaskActivity extends Activity
                         }
 
                         String taskDesc = taskDetailsInput.getText().toString();
-                        long taskTime = selectedTime.getTimeInMillis();
+                        Long taskTime = timeToSave == null ? null : timeToSave.getTimeInMillis();
                         TaskDbUtilMethods.writeAnItemToTaskTable(MyApp.dbHelper, taskTitle, taskDesc, taskTime);
                         finish();
                     }
@@ -206,6 +210,14 @@ public class CreateTaskActivity extends Activity
             @Override
             public void onClick(View view) {
                 setTimeButton.performClick();
+            }
+        });
+
+        clearTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timeToSave = null;
+                setTimeText.setText("");
             }
         });
     }

@@ -115,9 +115,12 @@ public class TaskAdapter extends BaseExpandableListAdapter{
         TaskDetails taskDetail = (TaskDetails) getChild(groupPosition, childPosition);
 
         // for dummy item
-        if (taskDetail.getWhichDetail() == TaskDetails.DUMMY_ITEM){
-            if (convertView == null){
+        int whichDetail = taskDetail.getWhichDetail();
+        boolean needInflateView = (convertView == null) || (convertView.getTag() == null) || ((int) convertView.getTag() != whichDetail);
+        if (whichDetail == TaskDetails.DUMMY_ITEM){
+            if (needInflateView){
                 convertView = layoutInflater.inflate(R.layout.item_task_details_dummy, parent, false);
+                convertView.setTag(whichDetail);
             }
             Button removeButton = (Button) convertView.findViewById(R.id.remove_button);
             removeButton.setOnClickListener(new View.OnClickListener() {
@@ -130,8 +133,9 @@ public class TaskAdapter extends BaseExpandableListAdapter{
         }
         // for normal task detail items
         else {
-            if (convertView == null){
+            if (needInflateView){
                 convertView = layoutInflater.inflate(R.layout.item_task_details, parent, false);
+                convertView.setTag(whichDetail);
             }
             TextView textView = (TextView) convertView.findViewById(R.id.detail_text);
             Object detailObject = taskDetail.getDetailObject();
@@ -139,13 +143,23 @@ public class TaskAdapter extends BaseExpandableListAdapter{
                 if (detailObject instanceof String) {
                     textView.setText((String) detailObject);
                 } else if (detailObject instanceof Long) {
-                    textView.setText(UtilMethods.timeToString((Long) detailObject));
+                    // not sure why it can become 0 when stored as null
+                    if ((long) detailObject != 0) {
+                        textView.setText(UtilMethods.timeToString((Long) detailObject));
+                    } else {
+                        textView.setText("");
+                    }
                 }
             }
         }
 
 
         return convertView;
+    }
+
+    @Override
+    public int getChildType(int groupPosition, int childPosition) {
+        return super.getChildType(groupPosition, childPosition);
     }
 
     @Override
