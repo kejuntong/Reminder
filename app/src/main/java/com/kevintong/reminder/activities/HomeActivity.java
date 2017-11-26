@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 
 import com.kevintong.reminder.CallbackInterface;
+import com.kevintong.reminder.Constants;
 import com.kevintong.reminder.MyApp;
 import com.kevintong.reminder.R;
 import com.kevintong.reminder.adapters.TaskAdapter;
@@ -25,8 +26,6 @@ import com.kevintong.reminder.models.TaskName;
 import java.util.ArrayList;
 
 public class HomeActivity extends Activity {
-
-    public final static int CREATE_TASK_SUCCESS = 1001;
 
     ExpandableListView expandableListView;
     TaskAdapter taskAdapter;
@@ -55,9 +54,9 @@ public class HomeActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CREATE_TASK_SUCCESS){
+        if (requestCode == Constants.TASK_LIST_CHANGE){
             if (resultCode == RESULT_OK){
-                // load data from data base when there is any task added
+                // load data from data base when there is any change
                 loadDataFromDb();
             }
         }
@@ -81,7 +80,7 @@ public class HomeActivity extends Activity {
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         addButton.setClickable(true);
-                        startActivityForResult(new Intent(HomeActivity.this, CreateTaskActivity.class), CREATE_TASK_SUCCESS);
+                        startActivityForResult(new Intent(HomeActivity.this, CreateTaskActivity.class), Constants.TASK_LIST_CHANGE);
                     }
 
                     @Override

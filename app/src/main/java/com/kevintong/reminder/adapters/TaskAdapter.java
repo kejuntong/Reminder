@@ -1,6 +1,10 @@
 package com.kevintong.reminder.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,9 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kevintong.reminder.CallbackInterface;
+import com.kevintong.reminder.Constants;
 import com.kevintong.reminder.MyApp;
 import com.kevintong.reminder.R;
 import com.kevintong.reminder.UtilMethods;
+import com.kevintong.reminder.activities.EditTaskActivity;
+import com.kevintong.reminder.database.TaskDbContract;
 import com.kevintong.reminder.database.TaskDbUtilMethods;
 import com.kevintong.reminder.models.TaskDetails;
 import com.kevintong.reminder.models.TaskName;
@@ -41,6 +48,7 @@ public class TaskAdapter extends BaseExpandableListAdapter{
     int collapsePos = -1;
 
     CallbackInterface removeItemCallback;
+    CallbackInterface editItemCallback;
 
     public TaskAdapter(Context context, ArrayList<TaskName> headerList, ArrayList<ArrayList<TaskDetails>> childList){
         this.mContext = context;
@@ -111,7 +119,6 @@ public class TaskAdapter extends BaseExpandableListAdapter{
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-
         TaskDetails taskDetail = (TaskDetails) getChild(groupPosition, childPosition);
 
         // for dummy item
@@ -127,7 +134,9 @@ public class TaskAdapter extends BaseExpandableListAdapter{
                 @Override
                 public void onClick(View view) {
                     TaskDbUtilMethods.removeItemFromTaskTable(MyApp.dbHelper, ((TaskName) getGroup(groupPosition)).getTaskId());
-                    removeItemCallback.onCallback(null);
+                    if (removeItemCallback != null) {
+                        removeItemCallback.onCallback(null);
+                    }
                 }
             });
 
@@ -135,7 +144,51 @@ public class TaskAdapter extends BaseExpandableListAdapter{
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    editButton.setTextColor(mContext.getResources().getColor(R.color.red));
+
+                    Animation editButtonAnim = AnimationUtils.loadAnimation(mContext, R.anim.button_clicked);
+                    editButton.startAnimation(editButtonAnim);
+
+                    editButtonAnim.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            editButton.setClickable(false);
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            editButton.setClickable(true);
+
+                            String rowId = ((TaskName) getGroup(groupPosition)).getTaskId();
+                            SQLiteDatabase readDb = MyApp.dbHelper.getReadableDatabase();
+                            Cursor cursor = readDb.rawQuery("SELECT * FROM " + TaskDbContract.TestDbEntry.TABLE +
+                                    " WHERE " + TaskDbContract.TestDbEntry._ID + " = " + rowId + " LIMIT 1", null);
+                            if (cursor.moveToFirst()){
+                                int idx = cursor.getColumnIndex(TaskDbContract.TestDbEntry.COL_ONE);
+                                String taskTitle = cursor.getString(idx);
+                                idx = cursor.getColumnIndex(TaskDbContract.TestDbEntry.COL_TWO);
+                                String taskDesc = cursor.getString(idx);
+                                idx = cursor.getColumnIndex(TaskDbContract.TestDbEntry.COL_THREE);
+                                Long taskTime = cursor.getLong(idx);
+
+                                Intent intent = new Intent(mContext, EditTaskActivity.class);
+                                intent.putExtra(Constants.TASK_ID, rowId);
+                                intent.putExtra(Constants.TASK_TITLE, taskTitle);
+                                intent.putExtra(Constants.TASK_DESC, taskDesc);
+                                intent.putExtra(Constants.TASK_TIME, taskTime);
+
+                                cursor.close();
+                                readDb.close();
+
+                                ((Activity) mContext).startActivityForResult(intent, Constants.TASK_LIST_CHANGE);
+                            }
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
                 }
             });
 
@@ -190,5 +243,9 @@ public class TaskAdapter extends BaseExpandableListAdapter{
 
     public void setRemoveItemCallback(CallbackInterface cbi){
         this.removeItemCallback = cbi;
+    }
+
+    public void setEditItemCallback(CallbackInterface cbi){
+        this.editItemCallback = cbi;
     }
 }
