@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="wrap_content"
+    android:minHeight="60dp">
 
     <com.kevintong.reminder.views.CustomFontTextView
         android:id="@+id/detail_text"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
         android:padding="15dp"
-        android:text="test test"
+        android:text=""
         android:gravity="center_vertical"
         android:textSize="20dp"
         android:background="@color/white"/>

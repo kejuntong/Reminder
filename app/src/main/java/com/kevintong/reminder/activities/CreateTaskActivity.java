@@ -158,6 +158,7 @@ public class CreateTaskActivity extends Activity
                         String taskDesc = taskDetailsInput.getText().toString();
                         Long taskTime = timeToSave == null ? null : timeToSave.getTimeInMillis();
                         TaskDbUtilMethods.writeAnItemToTaskTable(MyApp.dbHelper, taskTitle, taskDesc, taskTime);
+                        setResult(RESULT_OK);
                         finish();
                     }
 

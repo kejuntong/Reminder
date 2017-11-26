@@ -130,6 +130,15 @@ public class TaskAdapter extends BaseExpandableListAdapter{
                     removeItemCallback.onCallback(null);
                 }
             });
+
+            final Button editButton = (Button) convertView.findViewById(R.id.edit_button);
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editButton.setTextColor(mContext.getResources().getColor(R.color.red));
+                }
+            });
+
         }
         // for normal task detail items
         else {

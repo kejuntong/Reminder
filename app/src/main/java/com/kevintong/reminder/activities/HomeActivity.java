@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
@@ -24,6 +26,8 @@ import java.util.ArrayList;
 
 public class HomeActivity extends Activity {
 
+    public final static int CREATE_TASK_SUCCESS = 1001;
+
     ExpandableListView expandableListView;
     TaskAdapter taskAdapter;
     ArrayList<TaskName> taskList;
@@ -38,26 +42,56 @@ public class HomeActivity extends Activity {
 
         initListView();
 
-//        dbHelper = new TaskDbHelper(this, TaskDbContract.DB_NAME, null, TaskDbContract.DB_VERSION);
+        setAddButton();
 
-        addButton = (Button) findViewById(R.id.add_button);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                TaskDbUtilMethods.writeAnItemToTaskTable(dbHelper, "test title", "test desc", "test time");
-//
-//                loadDataFromDb();
-
-                startActivity(new Intent(HomeActivity.this, CreateTaskActivity.class));
-            }
-        });
-
+        loadDataFromDb();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadDataFromDb();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CREATE_TASK_SUCCESS){
+            if (resultCode == RESULT_OK){
+                // load data from data base when there is any task added
+                loadDataFromDb();
+            }
+        }
+    }
+
+    private void setAddButton(){
+        addButton = (Button) findViewById(R.id.add_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Animation addButtonAnim = AnimationUtils.loadAnimation(HomeActivity.this, R.anim.button_clicked);
+                addButton.startAnimation(addButtonAnim);
+
+                addButtonAnim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        addButton.setClickable(false);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        addButton.setClickable(true);
+                        startActivityForResult(new Intent(HomeActivity.this, CreateTaskActivity.class), CREATE_TASK_SUCCESS);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+            }
+        });
     }
 
     public void initListView(){
