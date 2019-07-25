@@ -69,11 +69,15 @@ public class EditTaskActivity extends Activity
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             String title = bundle.getString(Constants.TASK_TITLE);
+            String details = bundle.getString(Constants.TASK_DESC);
+            long time = bundle.getLong(Constants.TASK_TIME);
+
             taskNameInput.setText(title);
+            taskDetailsInput.setText(details);
+            setTimeText.setText(UtilMethods.timeToString(time));
         }
 
     }
-
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {

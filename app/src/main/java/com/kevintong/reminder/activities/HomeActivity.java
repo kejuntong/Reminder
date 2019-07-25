@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -39,7 +40,7 @@ public class HomeActivity extends Activity {
     ArrayList<TaskName> taskList;
     ArrayList<ArrayList<TaskDetails>> taskDetailList;
 
-    RelativeLayout selectionFrame;
+//    RelativeLayout selectionFrame;
 
     private View lastExpandedView = null;
 
@@ -56,10 +57,21 @@ public class HomeActivity extends Activity {
 
         loadDataFromDb();
 
-        initSelectionFrame();
+//        initSelectionFrame();
 
-        setSelectionAnimation();
+//        setSelectionAnimation();
 
+//        setRowArrow();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        return super.onKeyUp(keyCode, event);
     }
 
     @Override
@@ -161,75 +173,119 @@ public class HomeActivity extends Activity {
         taskAdapter.notifyDataSetChanged();
     }
 
-    private void initSelectionFrame(){
-        LayoutInflater inflater = LayoutInflater.from(this);
-        selectionFrame = (RelativeLayout) inflater.inflate(R.layout.view_black_frame, null, false);
+//    private void initSelectionFrame(){
+//        LayoutInflater inflater = LayoutInflater.from(this);
+//        selectionFrame = (RelativeLayout) inflater.inflate(R.layout.view_black_frame, null, false);
+//
+//        DisplayMetrics displayMetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        int screenWidth = displayMetrics.widthPixels;
+//
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+//                screenWidth - UtilMethods.dpToPx(this,10),
+//                UtilMethods.dpToPx(this, 50));
+//        params.setMarginStart(UtilMethods.dpToPx(this,5));
+//        selectionFrame.setLayoutParams(params);
+//
+//        RelativeLayout rootView = (RelativeLayout) findViewById(R.id.activity_home);
+//        rootView.addView(selectionFrame);
+//    }
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int screenWidth = displayMetrics.widthPixels;
+//    private void setSelectionAnimation(){
+//
+//        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+//            @Override
+//            public boolean onGroupClick(ExpandableListView expandableListView, final View view, int position, long id) {
+//                selectionFrame.setVisibility(View.VISIBLE);
+//                if (!expandableListView.isGroupExpanded(position)){
+//                    Log.d("TAG", "kejun, view height: " + UtilMethods.pxToDp(HomeActivity.this, view.getHeight() ));
+//
+//                    expandableListView.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            float yPosition = view.getY();
+//                            selectionFrame.setY(yPosition + UtilMethods.dpToPx(HomeActivity.this, 5));
+//                        }
+//                    });
+//
+//                    lastExpandedView = view;
+//                }
+//
+//                else {
+//                    if (lastExpandedView != view){
+//                        expandableListView.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                float yPosition = lastExpandedView.getY();
+//                                selectionFrame.setY(yPosition + UtilMethods.dpToPx(HomeActivity.this, 5));
+//                            }
+//                        });
+//                    } else {
+//
+//                        // TODO:
+//                        selectionFrame.setVisibility(View.GONE);
+//                    }
+//
+//                }
+//
+//
+//                return false;
+//            }
+//        });
+//
+//        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+//            @Override
+//            public void onGroupExpand(int position) {
+//
+//            }
+//        });
+//
+//    }
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                screenWidth - UtilMethods.dpToPx(this,10),
-                UtilMethods.dpToPx(this, 50));
-        params.setMarginStart(UtilMethods.dpToPx(this,5));
-        selectionFrame.setLayoutParams(params);
-
-        RelativeLayout rootView = (RelativeLayout) findViewById(R.id.activity_home);
-        rootView.addView(selectionFrame);
-    }
-
-    private void setSelectionAnimation(){
-
-        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView expandableListView, final View view, int position, long id) {
-                selectionFrame.setVisibility(View.VISIBLE);
-                if (!expandableListView.isGroupExpanded(position)){
-                    Log.d("TAG", "kejun, view height: " + UtilMethods.pxToDp(HomeActivity.this, view.getHeight() ));
-
-                    expandableListView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            float yPosition = view.getY();
-                            selectionFrame.setY(yPosition + UtilMethods.dpToPx(HomeActivity.this, 5));
-                        }
-                    });
-
-                    lastExpandedView = view;
-                }
-
-                else {
-                    if (lastExpandedView != view){
-                        expandableListView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                float yPosition = lastExpandedView.getY();
-                                selectionFrame.setY(yPosition + UtilMethods.dpToPx(HomeActivity.this, 5));
-                            }
-                        });
-                    } else {
-
-
-                        // TODO:
-                        selectionFrame.setVisibility(View.GONE);
-                    }
-
-                }
-
-
-                return false;
-            }
-        });
-
-        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int position) {
-
-            }
-        });
-
-
-    }
-
+//    private void setRowArrow(){
+//        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+//            @Override
+//            public boolean onGroupClick(ExpandableListView expandableListView, final View view, int position, long id) {
+//                if (!expandableListView.isGroupExpanded(position)){
+//
+//                    expandableListView.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//
+//                        }
+//                    });
+//
+//                    lastExpandedView = view;
+//                }
+//
+//                else {
+//                    if (lastExpandedView != view){
+//                        expandableListView.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                float yPosition = lastExpandedView.getY();
+//                                selectionFrame.setY(yPosition + UtilMethods.dpToPx(HomeActivity.this, 5));
+//                            }
+//                        });
+//                    } else {
+//
+//                        // TODO:
+//                        selectionFrame.setVisibility(View.GONE);
+//                    }
+//
+//                }
+//
+//
+//                return false;
+//            }
+//        });
+//
+//        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+//            @Override
+//            public void onGroupExpand(int position) {
+//
+//            }
+//        });
+//    }
 }

@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,6 +114,13 @@ public class TaskAdapter extends BaseExpandableListAdapter{
             collapsePos = -1;
         }
 
+        ImageView arrowImage = convertView.findViewById(R.id.arrow_image);
+        if (isExpanded) {
+            arrowImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.arrow_up));
+        } else {
+            arrowImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.arrow_down));
+        }
+
         return convertView;
     }
 
@@ -203,13 +211,17 @@ public class TaskAdapter extends BaseExpandableListAdapter{
             Object detailObject = taskDetail.getDetailObject();
             if (detailObject != null) {
                 if (detailObject instanceof String) {
-                    textView.setText((String) detailObject);
+                    if (((String) detailObject).isEmpty()) {
+                        textView.setText("No detail");
+                    } else {
+                        textView.setText("Task details: " + (String) detailObject);
+                    }
                 } else if (detailObject instanceof Long) {
                     // not sure why it can become 0 when stored as null
                     if ((long) detailObject != 0) {
-                        textView.setText(UtilMethods.timeToString((Long) detailObject));
+                        textView.setText("Time: " + UtilMethods.timeToString((Long) detailObject));
                     } else {
-                        textView.setText("");
+                        textView.setText("Time not set");
                     }
                 }
             }
